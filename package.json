@@ -3,7 +3,10 @@
   "private": true,
   "version": "0.2.0",
   "description": "Privacy-first medical study coverage analysis with optional local OCR and media transcription.",
-  "author": "Abinav Katuru",
+  "author": {
+    "name": "Abinav Katuru",
+    "email": "AKaturu@users.noreply.github.com"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
