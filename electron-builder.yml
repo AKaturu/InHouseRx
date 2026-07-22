@@ -29,6 +29,7 @@ win:
 linux:
   icon: build/icon.png
   category: Education
+  syncDesktopName: true
   synopsis: Find gaps between in-house exams and third-party medical study resources.
   target:
     - target: AppImage
