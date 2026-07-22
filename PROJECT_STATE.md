@@ -9,7 +9,7 @@ InHouseRx
 Build a privacy-first application that compares an in-house medical-school exam with third-party study resources and identifies missing or underrepresented topic coverage.
 
 ### Current Status
-Expanded MVP complete, MIT-licensed, and published at `https://github.com/AKaturu/InHouseRx` with `main` as the default branch.
+Expanded MVP and cross-platform desktop preview complete, MIT-licensed, and published at `https://github.com/AKaturu/InHouseRx` with `main` as the default branch. Version `v0.2.0` is available from GitHub Releases for Windows, macOS, and Linux.
 
 ---
 
@@ -55,26 +55,35 @@ MIT license, repository metadata, security policy, setup instructions, dependenc
 #### Tests Added
 Release readiness uses the full web/companion suites, lint, production build, dependency audit, and `git diff --check`.
 
+### Feature: Windows, macOS, and Linux desktop applications
+
+#### Validation
+The secure Electron shell passed a packaged Windows smoke check, the native GitHub Actions matrix built all documented targets successfully, and five unsigned packages were published in the public `v0.2.0` release. See `docs/iterations/DESKTOP_VALIDATION.md`.
+
+#### Tests Added
+`electron/security.test.mjs` covers external URL policy, trusted renderer origins, package path traversal, and companion payload limits. `src/services/localTranscriberClient.test.ts` now covers both desktop capability and transcription bridge paths.
+
 ---
 
 ## Current Work
 
 ### Active Feature
-None. The MVP is ready for product feedback.
+None. The desktop preview is published and ready for product feedback.
 
 ### Progress
-Requirements, research, architecture, implementation, automated testing, code review, production build, and visual validation are complete.
+Requirements, research, architecture, implementation, automated testing, native packaging, production validation, and GitHub publication are complete.
 
 ### Remaining Work
-No work remains within the documented MVP and publication scope.
+No work remains within the documented desktop preview and publication scope.
 
 ---
 
 ## Next Actions
 
-1. Gather feedback from medical students using the sample and OCR-assisted flows.
-2. Select an initial curriculum/block and have a subject-matter expert review the taxonomy.
-3. Decide whether the next increment should prioritize semantic matching, objective imports, or saved accounts.
+1. Gather feedback from medical students using the browser and desktop flows.
+2. Acquire Apple Developer ID and Windows code-signing credentials before promoting the preview as a broadly trusted download.
+3. Select an initial curriculum/block and have a subject-matter expert review the taxonomy.
+4. Decide whether the next increment should prioritize semantic matching, objective imports, saved accounts, or automatic desktop updates.
 
 ---
 
@@ -85,7 +94,7 @@ No work remains within the documented MVP and publication scope.
 - Should a future version analyze only blueprints/review material or also completed student answer data?
 
 ### Known Issues
-No critical defects are known. OCR and speech availability depend on the optional companion's installed local engines/models.
+No critical defects are known. Desktop packages are unsigned and may trigger operating-system security warnings. OCR and speech availability depend on the separately installed companion and its local engines/models.
 
 ### Technical Concerns
 - MVP matching is lexical and cannot identify every paraphrase.
@@ -95,4 +104,4 @@ No critical defects are known. OCR and speech availability depend on the optiona
 
 ## Resume Instructions
 
-Read `README.md`, `companion/README.md`, and the documents under `docs/`. Run `pnpm test`, `pnpm test:companion`, `pnpm lint`, and `pnpm build` to verify the baseline. Start with `src/services/localTranscriberClient.ts` and `companion/server.py` for extraction integration, `src/services/analysisEngine.ts` for analysis changes, or `src/components/` for product-flow changes. The next concrete step is to collect student feedback and choose the second milestone.
+Read `README.md`, `companion/README.md`, and the documents under `docs/`. Run `pnpm test`, `pnpm test:desktop`, `pnpm test:companion`, `pnpm lint`, and `pnpm build` to verify the baseline. Use `electron/main.mjs`, `electron/preload.cjs`, and `electron-builder.yml` for desktop work; start with `src/services/localTranscriberClient.ts` and `companion/server.py` for extraction integration, `src/services/analysisEngine.ts` for analysis changes, or `src/components/` for product-flow changes. The current release is `v0.2.0`; the next concrete step is to collect student feedback and choose the next product milestone or signing work.
