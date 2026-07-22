@@ -37,6 +37,8 @@ The React renderer stays platform-neutral. At runtime it detects the frozen `win
 
 `electron-builder.yml` describes native artifacts and branded metadata. `.github/workflows/desktop-release.yml` runs verification and builds on native operating systems, uploads per-platform artifacts, and creates a GitHub Release for version tags.
 
+The packaged runtime contains the Vite output plus the Electron main/preload files. Production `node_modules` are excluded by the package file filter because renderer dependencies are already bundled and the desktop processes import only built-in Node/Electron APIs. This avoids unused native dependency conflicts in universal macOS builds.
+
 ## Security boundaries
 
 - The renderer is treated as untrusted input even though its source ships with the app.

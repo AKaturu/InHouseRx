@@ -2,6 +2,7 @@ appId: com.akaturu.inhouserx
 productName: InHouseRx
 copyright: Copyright © 2026 Abinav Katuru
 asar: true
+npmRebuild: false
 directories:
   output: release
 files:
@@ -9,6 +10,7 @@ files:
   - electron/**/*
   - build/icon.png
   - package.json
+  - '!node_modules/**/*'
 artifactName: ${productName}-${version}-${os}-${arch}.${ext}
 mac:
   category: public.app-category.education
@@ -39,4 +41,3 @@ nsis:
   createDesktopShortcut: always
   createStartMenuShortcut: true
   shortcutName: InHouseRx
-
