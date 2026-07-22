@@ -32,6 +32,7 @@ The capture script accepts:
 
 It writes stable filenames:
 
+- `docs/media/inhouserx-landing.png`
 - `docs/media/inhouserx-upload-workspace.png`
 - `docs/media/inhouserx-report-overview.png`
 - `docs/media/inhouserx-priority-gaps.png`
@@ -44,4 +45,3 @@ It writes stable filenames:
 - Product selectors changed: fail rather than silently capturing the wrong state.
 - Existing final media: overwrite only the four explicit generated paths.
 - Recording not flushed: context closure is awaited before copying the final WebM.
-

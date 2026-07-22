@@ -4,6 +4,20 @@
 
 InHouseRx is a privacy-first medical study coverage analyzer. It compares an in-house exam or blueprint with third-party study resources, identifies topics that are missing or underrepresented, and turns those differences into a prioritized study plan.
 
+[![InHouseRx coverage report](docs/media/inhouserx-report-overview.png)](https://github.com/AKaturu/InHouseRx/releases/download/v0.2.0/inhouserx-demo.webm)
+
+▶ **[Watch the 30-second InHouseRx demo](https://github.com/AKaturu/InHouseRx/releases/download/v0.2.0/inhouserx-demo.webm)**
+
+## Product tour
+
+### Private comparison workspace
+
+![InHouseRx upload workspace for an in-house exam and study resources](docs/media/inhouserx-upload-workspace.png)
+
+### Explainable, prioritized gaps
+
+![InHouseRx priority queue with exam emphasis, resource coverage, evidence, and study actions](docs/media/inhouserx-priority-gaps.png)
+
 ## What the MVP includes
 
 - Browser-local extraction for PDF, DOCX, PPTX, TXT, and Markdown files.
@@ -66,6 +80,8 @@ pnpm build
 
 Coverage can be inspected with `pnpm test:coverage`.
 
+Project screenshots and the demo video can be regenerated from the production build with `pnpm media:capture`. Set `PLAYWRIGHT_BROWSER_PATH` if Edge, Chrome, or Chromium is not installed in a standard location.
+
 ## Project map
 
 - `src/services/documentExtractor.ts` — local format adapters and validation.
@@ -76,6 +92,7 @@ Coverage can be inspected with `pnpm test:coverage`.
 - `src/components/` — upload, processing, and report experiences.
 - `docs/requirements.md` — accepted MVP scope and criteria.
 - `docs/architecture.md` — components, data flow, and failure modes.
+- `docs/media/` — real-application screenshots and the captioned demo video.
 
 ## Current limitations
 
