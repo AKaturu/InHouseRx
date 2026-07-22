@@ -45,3 +45,10 @@ Screenshots from the validation run are stored locally under `artifacts/visual-v
 - OCR and speech require the optional companion plus installed local engines/models.
 - PDF and DOCX adapters use proven upstream libraries but do not yet have binary fixture integration tests in this repository.
 - The initial taxonomy needs expert review and curriculum expansion before a clinical production pilot.
+
+## Publication evidence
+
+- Public repository: `https://github.com/AKaturu/InHouseRx`
+- Default branch: `main`
+- GitHub license detection: MIT License
+- Repository topics: `medical-education`, `ocr`, `privacy-first`, `study-tools`, `typescript`

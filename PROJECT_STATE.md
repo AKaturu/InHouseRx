@@ -9,7 +9,7 @@ InHouseRx
 Build a privacy-first application that compares an in-house medical-school exam with third-party study resources and identifies missing or underrepresented topic coverage.
 
 ### Current Status
-Expanded MVP complete, MIT-licensed, and ready to publish from branch `codex/inhouse-rx-mvp`.
+Expanded MVP complete, MIT-licensed, and published at `https://github.com/AKaturu/InHouseRx` with `main` as the default branch.
 
 ---
 
@@ -66,7 +66,7 @@ None. The MVP is ready for product feedback.
 Requirements, research, architecture, implementation, automated testing, code review, production build, and visual validation are complete.
 
 ### Remaining Work
-No work remains within the documented MVP scope.
+No work remains within the documented MVP and publication scope.
 
 ---
 
