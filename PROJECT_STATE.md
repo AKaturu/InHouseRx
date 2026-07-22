@@ -63,6 +63,14 @@ The secure Electron shell passed a packaged Windows smoke check, the native GitH
 #### Tests Added
 `electron/security.test.mjs` covers external URL policy, trusted renderer origins, package path traversal, and companion payload limits. `src/services/localTranscriberClient.test.ts` now covers both desktop capability and transcription bridge paths.
 
+### Feature: Public product demo and screenshots
+
+#### Validation
+Four real-application PNG screenshots and a captioned 29.92-second 1280×720 WebM were captured from the production sample flow, visually inspected, committed under `docs/media/`, displayed from the README, and attached to the public `v0.2.0` release. See `docs/iterations/PROJECT_MEDIA_VALIDATION.md`.
+
+#### Tests Added
+The reproducible `pnpm media:capture` integration workflow fails on missing browsers, unavailable production preview, runtime page errors, or changed product selectors. Existing web, desktop, companion, lint, build, and audit checks remain green.
+
 ---
 
 ## Current Work
@@ -80,7 +88,7 @@ No work remains within the documented desktop preview and publication scope.
 
 ## Next Actions
 
-1. Gather feedback from medical students using the browser and desktop flows.
+1. Gather feedback from medical students using the README demo and browser/desktop flows.
 2. Acquire Apple Developer ID and Windows code-signing credentials before promoting the preview as a broadly trusted download.
 3. Select an initial curriculum/block and have a subject-matter expert review the taxonomy.
 4. Decide whether the next increment should prioritize semantic matching, objective imports, saved accounts, or automatic desktop updates.
@@ -104,4 +112,4 @@ No critical defects are known. Desktop packages are unsigned and may trigger ope
 
 ## Resume Instructions
 
-Read `README.md`, `companion/README.md`, and the documents under `docs/`. Run `pnpm test`, `pnpm test:desktop`, `pnpm test:companion`, `pnpm lint`, and `pnpm build` to verify the baseline. Use `electron/main.mjs`, `electron/preload.cjs`, and `electron-builder.yml` for desktop work; start with `src/services/localTranscriberClient.ts` and `companion/server.py` for extraction integration, `src/services/analysisEngine.ts` for analysis changes, or `src/components/` for product-flow changes. The current release is `v0.2.0`; the next concrete step is to collect student feedback and choose the next product milestone or signing work.
+Read `README.md`, `companion/README.md`, and the documents under `docs/`. Run `pnpm test`, `pnpm test:desktop`, `pnpm test:companion`, `pnpm lint`, and `pnpm build` to verify the baseline. Run `pnpm media:capture` to regenerate the real-app media. Use `electron/main.mjs`, `electron/preload.cjs`, and `electron-builder.yml` for desktop work; start with `src/services/localTranscriberClient.ts` and `companion/server.py` for extraction integration, `src/services/analysisEngine.ts` for analysis changes, or `src/components/` for product-flow changes. The current release is `v0.2.0`; the next concrete step is to collect student feedback and choose the next product milestone or signing work.
