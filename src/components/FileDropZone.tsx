@@ -72,7 +72,7 @@ export function FileDropZone({ kind, files, onFiles, onRemove, error }: FileDrop
           <div className="upload-icon"><UploadCloud size={24} /></div>
           <strong>Drop {isExam ? 'your exam' : 'your resources'} here</strong>
           <span>or <u>browse files</u></span>
-          <small>PDF, DOCX, PPTX, TXT · up to 20 MB</small>
+          <small>Documents, images & media · up to 20 MB</small>
         </div>
       ) : (
         <div className="selected-files">
@@ -100,7 +100,7 @@ export function FileDropZone({ kind, files, onFiles, onRemove, error }: FileDrop
         ref={inputRef}
         className="visually-hidden"
         type="file"
-        accept=".pdf,.docx,.pptx,.txt,.md"
+        accept=".pdf,.docx,.pptx,.txt,.md,.png,.jpg,.jpeg,.tif,.tiff,.bmp,.webp,.wav,.mp3,.m4a,.flac,.ogg,.mp4,.mov,.mkv,.webm"
         multiple={!isExam}
         onChange={handleChange}
       />

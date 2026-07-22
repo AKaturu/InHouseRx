@@ -1,0 +1,1 @@
+local-content-transcriber[ocr,speech] @ git+https://github.com/AKaturu/local-content-transcriber.git@a7e8ed6f03e79a7cc49ee424114753cd36a8d57c

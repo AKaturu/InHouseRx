@@ -130,6 +130,8 @@ export const analyzeDocuments = (exam: SourceDocument, resources: SourceDocument
     moderateGaps: cleanedTopics.filter((topic) => topic.status === 'moderate').length,
     strongAreas: cleanedTopics.filter((topic) => topic.status === 'strong' || topic.status === 'covered').length,
     recognizedTopics: cleanedTopics.length,
+    localTranscriberAssisted: [exam, ...resources].some((document) => document.extractionMethod === 'local-transcriber'),
+    extractionWarnings: [exam, ...resources].flatMap((document) => document.warnings ?? []),
     topicResults: cleanedTopics,
     systemCoverage: buildSystemCoverage(cleanedTopics),
   }

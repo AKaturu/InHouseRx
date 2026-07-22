@@ -1,6 +1,7 @@
 import { ArrowRight, FileSearch, Info, LockKeyhole, PlayCircle } from 'lucide-react'
 import { useState } from 'react'
 import { FileDropZone } from './FileDropZone'
+import { CompanionStatus } from './CompanionStatus'
 import { validateFile } from '../services/documentExtractor'
 
 interface UploadWorkspaceProps {
@@ -46,11 +47,14 @@ export function UploadWorkspace({ onAnalyze, onSample }: UploadWorkspaceProps) {
           <div>
             <span className="section-kicker">New analysis</span>
             <h2 id="workspace-title">Compare your coverage</h2>
-            <p>Add both sides of the study equation. Your files stay in this browser.</p>
+            <p>Add both sides of the study equation. Your files stay on this device.</p>
           </div>
-          <button className="sample-button" onClick={onSample}>
-            <PlayCircle size={17} /> View sample report
-          </button>
+          <div className="workspace-tools">
+            <CompanionStatus />
+            <button className="sample-button" onClick={onSample}>
+              <PlayCircle size={17} /> View sample report
+            </button>
+          </div>
         </div>
 
         <div className="upload-grid">
@@ -87,7 +91,7 @@ export function UploadWorkspace({ onAnalyze, onSample }: UploadWorkspaceProps) {
 
       <div className="guidance-note">
         <Info size={17} />
-        <p><strong>Best results:</strong> Use a text-based exam blueprint, study guide, or review copy. Upload only files you are authorized to use.</p>
+        <p><strong>Best results:</strong> Use a detailed exam blueprint or review copy. The optional local companion adds OCR, image, audio, and video support.</p>
       </div>
     </main>
   )

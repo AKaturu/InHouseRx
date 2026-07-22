@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "companion": "python companion/server.py",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "test": "vitest run",
+    "test:companion": "python -m unittest companion.test_config",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
   },

@@ -1,4 +1,4 @@
-import { AlertTriangle, ArrowDownRight, ArrowLeft, ArrowRight, BookOpenCheck, CheckCircle2, ChevronRight, FileText, Gauge, Lightbulb, RotateCcw, ShieldCheck, Sparkles } from 'lucide-react'
+import { AlertTriangle, ArrowDownRight, ArrowLeft, ArrowRight, BookOpenCheck, CheckCircle2, ChevronRight, FileText, Gauge, Lightbulb, RotateCcw, ScanText, ShieldCheck, Sparkles } from 'lucide-react'
 import type { AnalysisReportModel, TopicResult } from '../domain/types'
 
 interface AnalysisReportProps {
@@ -70,6 +70,9 @@ export function AnalysisReport({ report, onReset }: AnalysisReportProps) {
             <h1>Your highest-yield gaps, prioritized.</h1>
             <p>We found {report.recognizedTopics} tested topics across your materials and ranked the areas where your resources need reinforcement.</p>
             <div className="source-summary"><FileText size={15} /><strong>{report.examName}</strong><span>compared with</span><strong>{report.resourceNames.length} resource{report.resourceNames.length === 1 ? '' : 's'}</strong></div>
+            {report.localTranscriberAssisted && (
+              <div className="assistant-summary"><ScanText size={14} /> Local Content Transcriber assisted with extraction</div>
+            )}
           </div>
           <div className="readiness-panel">
             <ScoreRing score={report.readinessScore} />
@@ -123,6 +126,12 @@ export function AnalysisReport({ report, onReset }: AnalysisReportProps) {
               <ShieldCheck size={20} />
               <div><strong>Your analysis stayed private</strong><span>No file contents were saved or uploaded.</span></div>
             </section>
+            {report.extractionWarnings.length > 0 && (
+              <section className="sidebar-card warning-card">
+                <AlertTriangle size={18} />
+                <div><strong>Extraction note</strong><span>{report.extractionWarnings[0]}</span></div>
+              </section>
+            )}
           </aside>
         </div>
 

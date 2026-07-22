@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { afterEach, vi } from 'vitest'
 import JSZip from 'jszip'
 import { extractDocument, MAX_FILE_SIZE, validateFile } from './documentExtractor'
 
@@ -8,12 +9,16 @@ const makeFile = (content: string, name: string) => {
   return file
 }
 
+afterEach(() => vi.unstubAllGlobals())
+
 describe('validateFile', () => {
   it('accepts supported document extensions', () => {
     expect(validateFile(makeFile('medical content', 'exam.pdf'))).toBeNull()
     expect(validateFile(makeFile('medical content', 'notes.docx'))).toBeNull()
     expect(validateFile(makeFile('medical content', 'slides.pptx'))).toBeNull()
     expect(validateFile(makeFile('medical content', 'outline.TXT'))).toBeNull()
+    expect(validateFile(makeFile('medical content', 'scan.png'))).toBeNull()
+    expect(validateFile(makeFile('medical content', 'lecture.mp3'))).toBeNull()
   })
 
   it('rejects unsupported, empty, and oversized files with specific messages', () => {
@@ -56,5 +61,24 @@ describe('extractDocument', () => {
     const result = await extractDocument(file, 'resource')
 
     expect(result.text).toBe('Myocardial infarction overview\n\nTroponin follow-up')
+  })
+
+  it('routes image files through Local Content Transcriber', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        filename: 'scan.png',
+        media_type: 'image/png',
+        text: 'Recognized myocardial infarction and troponin content.',
+        warnings: ['OCR was used.'],
+      }),
+    }))
+    const file = makeFile('placeholder image bytes', 'scan.png')
+
+    const result = await extractDocument(file, 'resource')
+
+    expect(result.extractionMethod).toBe('local-transcriber')
+    expect(result.text).toContain('troponin')
+    expect(result.warnings).toEqual(['OCR was used.'])
   })
 })

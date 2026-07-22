@@ -6,6 +6,8 @@ export interface SourceDocument {
   role: DocumentRole
   text: string
   size: number
+  extractionMethod?: 'browser' | 'local-transcriber'
+  warnings?: string[]
 }
 
 export type TopicStatus = 'critical' | 'moderate' | 'covered' | 'strong'
@@ -47,6 +49,8 @@ export interface AnalysisReportModel {
   moderateGaps: number
   strongAreas: number
   recognizedTopics: number
+  localTranscriberAssisted: boolean
+  extractionWarnings: string[]
   topicResults: TopicResult[]
   systemCoverage: SystemCoverage[]
 }
