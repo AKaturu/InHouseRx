@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import JSZip from 'jszip'
 import { extractDocument, MAX_FILE_SIZE, validateFile } from './documentExtractor'
 
 const makeFile = (content: string, name: string) => {
@@ -38,5 +39,22 @@ describe('extractDocument', () => {
 
   it('rejects files with too little selectable text', async () => {
     await expect(extractDocument(makeFile('tiny', 'exam.txt'), 'exam')).rejects.toThrow('too little selectable text')
+  })
+
+  it('extracts slide text from a PPTX container in slide order', async () => {
+    const zip = new JSZip()
+    zip.file('ppt/slides/slide2.xml', '<p:sld xmlns:p="p" xmlns:a="a"><a:t>Troponin follow-up</a:t></p:sld>')
+    zip.file('ppt/slides/slide1.xml', '<p:sld xmlns:p="p" xmlns:a="a"><a:t>Myocardial infarction overview</a:t></p:sld>')
+    const bytes = await zip.generateAsync({ type: 'uint8array' })
+    const buffer = new ArrayBuffer(bytes.byteLength)
+    new Uint8Array(buffer).set(bytes)
+    const file = new File([buffer], 'lecture.pptx', { lastModified: 456 })
+    Object.defineProperty(file, 'arrayBuffer', {
+      value: async () => buffer,
+    })
+
+    const result = await extractDocument(file, 'resource')
+
+    expect(result.text).toBe('Myocardial infarction overview\n\nTroponin follow-up')
   })
 })

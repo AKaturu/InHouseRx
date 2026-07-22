@@ -9,34 +9,56 @@ InHouseRx
 Build a privacy-first application that compares an in-house medical-school exam with third-party study resources and identifies missing or underrepresented topic coverage.
 
 ### Current Status
-Phase 3 (Architecture Design) — requirements, research, and architecture completed; implementation next.
+MVP complete and validated on branch `codex/inhouse-rx-mvp`.
 
 ---
 
 ## Completed Features
 
-No implementation features are complete yet.
+### Feature: Branded upload workspace
+
+#### Validation
+Responsive desktop/mobile browser inspection, no overflow, no console errors, and the exact `#337ab7`/white wordmark treatment verified.
+
+#### Tests Added
+`src/App.test.tsx` covers branding, required roles, unsupported files, actual text uploads, sample reports, and reset.
+
+### Feature: Local document extraction
+
+#### Validation
+TXT and synthetic PPTX extraction paths pass, supported formats and size limits are enforced, and parser bundles load on demand.
+
+#### Tests Added
+`src/services/documentExtractor.test.ts` covers validation, empty text, TXT extraction, and slide-order PPTX extraction.
+
+### Feature: Explainable coverage analysis
+
+#### Validation
+Deterministic sample results, stronger-resource comparison, unknown-topic failure behavior, and report rendering all pass.
+
+#### Tests Added
+`src/services/analysisEngine.test.ts` covers happy, improvement, unsupported-content, and missing-resource cases.
 
 ---
 
 ## Current Work
 
 ### Active Feature
-Branded upload and gap-analysis MVP.
+None. The MVP is ready for product feedback.
 
 ### Progress
-MVP requirements, technical research, and system architecture are documented in `docs/`.
+Requirements, research, architecture, implementation, automated testing, code review, production build, and visual validation are complete.
 
 ### Remaining Work
-Implement, test, visually verify, review, and validate the web application.
+No work remains within the documented MVP scope.
 
 ---
 
 ## Next Actions
 
-1. Scaffold the React + TypeScript application.
-2. Implement extraction and deterministic analysis services with tests.
-3. Build and visually verify the upload and report experiences.
+1. Gather feedback from medical students using the sample report.
+2. Select an initial curriculum/block and have a subject-matter expert review the taxonomy.
+3. Decide whether the next increment should prioritize OCR, semantic matching, or saved accounts.
 
 ---
 
@@ -47,7 +69,7 @@ Implement, test, visually verify, review, and validate the web application.
 - Should a future version analyze only blueprints/review material or also completed student answer data?
 
 ### Known Issues
-None yet.
+No critical defects are known. Scanned/image-only PDFs are intentionally unsupported and return guidance.
 
 ### Technical Concerns
 - MVP matching is lexical and cannot identify every paraphrase.
@@ -57,4 +79,4 @@ None yet.
 
 ## Resume Instructions
 
-Read `docs/requirements.md`, `docs/research.md`, and `docs/architecture.md`. The next step is to scaffold the React app and implement the domain services before presentation components.
+Read `README.md` and the documents under `docs/`. Run `pnpm test && pnpm lint && pnpm build` to verify the baseline. Start with `src/services/analysisEngine.ts` and `src/domain/topicTaxonomy.ts` for analysis changes, or `src/App.tsx` and `src/components/` for product-flow changes. The next concrete step is to collect feedback on the sample report and choose the second milestone.

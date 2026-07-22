@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import App from './App'
@@ -38,5 +38,37 @@ describe('InHouseRx application', () => {
 
     await user.click(screen.getByRole('button', { name: /New analysis/i }))
     expect(screen.getByRole('heading', { name: /Compare your coverage/i })).toBeInTheDocument()
+  })
+
+  it('analyzes uploaded text documents through the complete local workflow', async () => {
+    const user = userEvent.setup()
+    const { container } = render(<App />)
+    const inputs = container.querySelectorAll<HTMLInputElement>('input[type="file"]')
+    const exam = new File([
+      'Acid base disorders include metabolic acidosis, metabolic alkalosis, anion gap, and Winter formula.',
+    ], 'renal-exam.txt', { type: 'text/plain', lastModified: 1 })
+    const notes = new File([
+      'This short renal review covers metabolic acidosis and the anion gap.',
+    ], 'renal-notes.txt', { type: 'text/plain', lastModified: 2 })
+    Object.defineProperty(exam, 'text', { value: async () => 'Acid base disorders include metabolic acidosis, metabolic alkalosis, anion gap, and Winter formula.' })
+    Object.defineProperty(notes, 'text', { value: async () => 'This short renal review covers metabolic acidosis and the anion gap.' })
+
+    await user.upload(inputs[0], exam)
+    await user.upload(inputs[1], notes)
+    await user.click(screen.getByRole('button', { name: 'Analyze coverage' }))
+
+    await waitFor(() => expect(screen.getByRole('heading', { name: /Your highest-yield gaps/i })).toBeInTheDocument(), { timeout: 2000 })
+    expect(screen.getAllByText('Acid–base disorders').length).toBeGreaterThan(0)
+    expect(screen.getByText('renal-exam.txt')).toBeInTheDocument()
+  })
+
+  it('rejects an unsupported upload with a useful message', async () => {
+    const { container } = render(<App />)
+    const examInput = container.querySelector<HTMLInputElement>('input[type="file"]')!
+    const archive = new File(['content'], 'exam.zip', { type: 'application/zip' })
+
+    fireEvent.change(examInput, { target: { files: [archive] } })
+
+    expect(screen.getByText(/exam.zip is not supported/i)).toBeInTheDocument()
   })
 })
