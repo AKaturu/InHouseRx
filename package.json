@@ -2,6 +2,13 @@
   "name": "inhouserx",
   "private": true,
   "version": "0.1.0",
+  "description": "Privacy-first medical study coverage analysis with optional local OCR and media transcription.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKaturu/InHouseRx.git"
+  },
+  "homepage": "https://github.com/AKaturu/InHouseRx#readme",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -1,17 +1,20 @@
 # InHouseRx
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-337ab7.svg)](LICENSE)
+
 InHouseRx is a privacy-first medical study coverage analyzer. It compares an in-house exam or blueprint with third-party study resources, identifies topics that are missing or underrepresented, and turns those differences into a prioritized study plan.
 
 ## What the MVP includes
 
-- Local extraction for PDF, DOCX, PPTX, TXT, and Markdown files.
+- Browser-local extraction for PDF, DOCX, PPTX, TXT, and Markdown files.
+- Optional [Local Content Transcriber](https://github.com/AKaturu/local-content-transcriber) integration for scanned documents, images, audio, and video.
 - A transparent, versioned medical-topic taxonomy.
 - Exam-emphasis and resource-coverage scoring with evidence terms.
 - Prioritized critical and moderate gaps, system-level coverage, and study actions.
 - A built-in sample report for exploring the product without private files.
 - Responsive, accessible UI branded with the `#337ab7` InHouseRx theme.
 
-Uploaded content is analyzed in the browser and is not transmitted or persisted.
+Uploaded content stays on the device and is not transmitted to a cloud service or persisted. Standard documents are read directly in the browser; companion-assisted files travel only to a loopback service on the same machine.
 
 ## Run locally
 
@@ -24,10 +27,24 @@ pnpm dev
 
 Open the local URL printed by Vite. Choose **View sample report** for the fastest product tour.
 
+## Optional local OCR and media companion
+
+InHouseRx can compose the separately tested Local Content Transcriber engine for scanned PDFs, PNG/JPEG/TIFF/WebP images, common audio files, and MP4/MOV/MKV/WebM video.
+
+```powershell
+python -m venv .venv-companion
+.venv-companion\Scripts\Activate.ps1
+python -m pip install -r companion\requirements.txt
+python companion\server.py
+```
+
+Keep the companion terminal running and start InHouseRx in another terminal. The upload workspace reports **OCR + media ready** when the loopback connection succeeds. See [`companion/README.md`](companion/README.md) for configuration and model notes.
+
 ## Verify
 
 ```bash
 pnpm test
+pnpm test:companion
 pnpm lint
 pnpm build
 ```
@@ -37,6 +54,8 @@ Coverage can be inspected with `pnpm test:coverage`.
 ## Project map
 
 - `src/services/documentExtractor.ts` — local format adapters and validation.
+- `src/services/localTranscriberClient.ts` — loopback-only companion contract.
+- `companion/` — secure FastAPI composition layer for Local Content Transcriber.
 - `src/services/analysisEngine.ts` — deterministic coverage and priority calculations.
 - `src/domain/topicTaxonomy.ts` — current topic/alias definitions.
 - `src/components/` — upload, processing, and report experiences.
@@ -45,9 +64,13 @@ Coverage can be inspected with `pnpm test:coverage`.
 
 ## Current limitations
 
-- Image-only/scanned PDFs require OCR and are rejected with guidance.
+- OCR and media formats require the optional local companion and its relevant engine/model.
 - Matching is lexical, so paraphrases can be missed.
 - Coverage measures textual representation, not teaching quality or factual correctness.
 - The taxonomy is an initial pre-clinical set and should be reviewed with curriculum experts before production use.
 
 InHouseRx is educational study-planning software. It does not predict scores and is not affiliated with NBME or NBOME.
+
+## License
+
+Released under the [MIT License](LICENSE).

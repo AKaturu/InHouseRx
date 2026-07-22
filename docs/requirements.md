@@ -10,15 +10,15 @@ The primary user is a medical student preparing for an in-house course exam.
 
 1. The student uploads one in-house exam or exam blueprint.
 2. The student uploads one or more third-party study resources.
-3. InHouseRx extracts text locally in the browser.
+3. InHouseRx extracts text locally in the browser or through the optional loopback companion.
 4. The app maps the documents to a transparent medical-topic taxonomy.
 5. The app reports resource gaps, strengths, and a prioritized study plan.
 
 ## Functional requirements
 
 - Present a polished, responsive landing/dashboard experience branded with a `#337ab7` primary theme and a white **InHouseRx** wordmark.
-- Accept `.pdf`, `.docx`, `.pptx`, `.txt`, and `.md` files.
-- Keep uploaded file contents on the user's device for the MVP.
+- Accept `.pdf`, `.docx`, `.pptx`, `.txt`, and `.md` files in browser-only mode; accept common image, audio, and video formats through the optional local companion.
+- Keep uploaded file contents on the user's device for the MVP, including companion-assisted processing over loopback.
 - Clearly distinguish the in-house exam from third-party resources.
 - Validate missing files, unsupported file types, and unreadable/image-only documents.
 - Extract selectable text from supported files.
@@ -32,7 +32,7 @@ The primary user is a medical student preparing for an in-house course exam.
 ## Non-functional requirements
 
 - Accessibility: semantic landmarks, visible keyboard focus, labelled controls, and sufficient contrast.
-- Privacy: no upload or network transmission of document contents in the MVP.
+- Privacy: no remote upload or off-device transmission of document contents; companion traffic is loopback-only.
 - Performance: analyze typical text-based course materials (up to 20 MB per file) without a page reload.
 - Maintainability: separate file extraction, topic analysis, domain types, and presentation components.
 - Testability: deterministic business logic with unit, integration, and user-facing component coverage.
@@ -41,7 +41,7 @@ The primary user is a medical student preparing for an in-house course exam.
 
 ### Included
 
-- A frontend-only web MVP.
+- A web MVP with an optional local Python companion.
 - Deterministic topic matching for a curated pre-clinical medicine taxonomy.
 - Text extraction for the listed formats.
 - One in-house exam and up to six resource files per analysis.
@@ -49,7 +49,7 @@ The primary user is a medical student preparing for an in-house course exam.
 ### Deferred
 
 - Accounts, cloud persistence, collaboration, payments, and institutional administration.
-- OCR for scanned/image-only documents.
+- Bundling OCR or speech models directly into the frontend.
 - Semantic embeddings, hosted LLM inference, and model training.
 - Question-answer correctness analysis or personally identifiable student-performance records.
 - Claims of NBME/NBOME affiliation, equivalence, or score prediction.
@@ -61,7 +61,7 @@ The primary user is a medical student preparing for an in-house course exam.
 2. A user can select an exam and at least one resource using either file pickers or drag and drop.
 3. Starting without both document roles shows a clear validation message and does not begin analysis.
 4. Unsupported or oversized files are rejected with a specific message.
-5. Valid text-bearing supported files produce an analysis without sending file contents to a server.
+5. Valid text-bearing supported files produce an analysis without off-device transmission; companion-assisted files use only the local loopback service.
 6. The report shows a readiness score, at least three summary metrics, and gap topics ordered by priority.
 7. Each reported gap includes exam emphasis, resource coverage, evidence, and a recommended action.
 8. The sample-data action produces a complete report without uploads.

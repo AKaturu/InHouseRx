@@ -2,7 +2,7 @@
 
 ## System overview
 
-InHouseRx is a static single-page application. Files are selected by the browser, converted to text on-device, analyzed against a versioned topic taxonomy, and rendered as a report. No document content crosses a network boundary.
+InHouseRx is a single-page application with an optional loopback companion. Files are selected by the browser, converted to text on-device, analyzed against a versioned topic taxonomy, and rendered as a report. Ordinary documents stay inside the browser; OCR/media files may cross only the local loopback boundary to Local Content Transcriber.
 
 ```text
 File selection -> validation -> local extraction -> topic analysis -> report model -> dashboard
@@ -18,7 +18,9 @@ File selection -> validation -> local extraction -> topic analysis -> report mod
 - `UploadWorkspace`: exam/resource drop zones, selected-file state, validation, and sample mode.
 - `ProcessingView`: communicates local extraction and analysis stages.
 - `AnalysisReport`: summary score, metrics, gap cards, coverage overview, and next actions.
-- `DocumentExtractor`: routes files by extension to text, PDF, DOCX, or PPTX adapters.
+- `DocumentExtractor`: routes files by extension to browser text/PDF/DOCX/PPTX adapters or the optional Local Content Transcriber client.
+- `LocalTranscriberClient`: validates a loopback-only endpoint, checks capabilities, and maps sectioned OCR/media responses into `SourceDocument`.
+- `companion/server.py`: composes the upstream local service with a narrow CORS allowlist for the InHouseRx browser origin.
 - `AnalysisEngine`: maps text to taxonomy topics and creates a deterministic report.
 - `topicTaxonomy`: versioned medical systems, topics, aliases, and relevance metadata.
 
@@ -58,7 +60,7 @@ For every taxonomy topic:
 - Missing exam or resources: prevent analysis and point to the incomplete drop zone.
 - Unsupported/oversized file: reject before extraction.
 - Encrypted/corrupt file: return a role-specific extraction error.
-- Empty or image-only file: explain that selectable text or OCR is required.
+- Empty or image-only file: fall back to the companion when available, otherwise explain how to start local OCR.
 - No recognized medical topics: ask for richer source material instead of fabricating a report.
 - Partial resource failure: fail the run with the file name so the user can remove or replace it.
 
@@ -72,6 +74,6 @@ For every taxonomy topic:
 ## Security and privacy boundary
 
 - Use raw text extraction only; never inject document HTML.
-- Never persist document text in local storage.
+- Never persist document text in local storage; companion staging is request-scoped and deleted by the upstream service.
 - Avoid analytics in the MVP.
 - Revoke any temporary object URLs if introduced later.

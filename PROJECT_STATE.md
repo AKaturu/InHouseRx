@@ -9,7 +9,7 @@ InHouseRx
 Build a privacy-first application that compares an in-house medical-school exam with third-party study resources and identifies missing or underrepresented topic coverage.
 
 ### Current Status
-MVP complete and validated on branch `codex/inhouse-rx-mvp`.
+Expanded MVP complete, MIT-licensed, and ready to publish from branch `codex/inhouse-rx-mvp`.
 
 ---
 
@@ -39,6 +39,22 @@ Deterministic sample results, stronger-resource comparison, unknown-topic failur
 #### Tests Added
 `src/services/analysisEngine.test.ts` covers happy, improvement, unsupported-content, and missing-resource cases.
 
+### Feature: Local Content Transcriber companion
+
+#### Validation
+The pinned upstream `0.2.0` API was composed through the loopback bridge and returned health, capabilities, privacy metadata, and the expected CORS origin. Desktop/mobile browser checks rendered the connected OCR/media-ready state without overflow or console errors.
+
+#### Tests Added
+`src/services/localTranscriberClient.test.ts`, the expanded extractor suite, and `companion/test_config.py` cover URL security, capability mapping, multipart transcription, structured failures, image routing, and origin validation.
+
+### Feature: Open-source release readiness
+
+#### Validation
+MIT license, repository metadata, security policy, setup instructions, dependency audit, and clean Git history are present.
+
+#### Tests Added
+Release readiness uses the full web/companion suites, lint, production build, dependency audit, and `git diff --check`.
+
 ---
 
 ## Current Work
@@ -56,9 +72,9 @@ No work remains within the documented MVP scope.
 
 ## Next Actions
 
-1. Gather feedback from medical students using the sample report.
+1. Gather feedback from medical students using the sample and OCR-assisted flows.
 2. Select an initial curriculum/block and have a subject-matter expert review the taxonomy.
-3. Decide whether the next increment should prioritize OCR, semantic matching, or saved accounts.
+3. Decide whether the next increment should prioritize semantic matching, objective imports, or saved accounts.
 
 ---
 
@@ -69,14 +85,14 @@ No work remains within the documented MVP scope.
 - Should a future version analyze only blueprints/review material or also completed student answer data?
 
 ### Known Issues
-No critical defects are known. Scanned/image-only PDFs are intentionally unsupported and return guidance.
+No critical defects are known. OCR and speech availability depend on the optional companion's installed local engines/models.
 
 ### Technical Concerns
 - MVP matching is lexical and cannot identify every paraphrase.
-- Image-only PDFs need a future OCR adapter.
+- Hosted HTTPS builds may need an explicitly configured secure-context strategy before they can call an HTTP loopback companion consistently across browsers; the validated workflow is local development/desktop use.
 
 ---
 
 ## Resume Instructions
 
-Read `README.md` and the documents under `docs/`. Run `pnpm test && pnpm lint && pnpm build` to verify the baseline. Start with `src/services/analysisEngine.ts` and `src/domain/topicTaxonomy.ts` for analysis changes, or `src/App.tsx` and `src/components/` for product-flow changes. The next concrete step is to collect feedback on the sample report and choose the second milestone.
+Read `README.md`, `companion/README.md`, and the documents under `docs/`. Run `pnpm test`, `pnpm test:companion`, `pnpm lint`, and `pnpm build` to verify the baseline. Start with `src/services/localTranscriberClient.ts` and `companion/server.py` for extraction integration, `src/services/analysisEngine.ts` for analysis changes, or `src/components/` for product-flow changes. The next concrete step is to collect student feedback and choose the second milestone.

@@ -78,7 +78,7 @@ export function UploadWorkspace({ onAnalyze, onSample }: UploadWorkspaceProps) {
         <div className="workspace-footer">
           <div className="privacy-note">
             <LockKeyhole size={18} />
-            <div><strong>Private by design</strong><span>Files are analyzed locally and never uploaded.</span></div>
+            <div><strong>Private by design</strong><span>Files are analyzed locally and never sent off-device.</span></div>
           </div>
           <div className="analyze-actions">
             {errors.form && <span className="form-error" role="alert">{errors.form}</span>}

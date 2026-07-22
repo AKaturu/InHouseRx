@@ -1,0 +1,15 @@
+# Security policy
+
+## Supported version
+
+The latest commit on the default branch is the supported development version.
+
+## Reporting a vulnerability
+
+Please use GitHub's private vulnerability reporting for the repository rather than opening a public issue with exploit details or private document content.
+
+## Privacy boundary
+
+InHouseRx has no cloud content API, analytics, or document persistence. Browser-supported documents are processed in the browser. Optional OCR/media processing is sent only to the configured HTTP loopback companion, and the client rejects non-loopback companion addresses.
+
+Do not include real student records, protected health information, licensed exam content, or other sensitive source files in bug reports.

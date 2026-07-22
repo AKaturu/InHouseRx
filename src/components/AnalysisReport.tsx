@@ -124,7 +124,7 @@ export function AnalysisReport({ report, onReset }: AnalysisReportProps) {
 
             <section className="sidebar-card privacy-card">
               <ShieldCheck size={20} />
-              <div><strong>Your analysis stayed private</strong><span>No file contents were saved or uploaded.</span></div>
+              <div><strong>Your analysis stayed private</strong><span>No file contents were saved or sent off-device.</span></div>
             </section>
             {report.extractionWarnings.length > 0 && (
               <section className="sidebar-card warning-card">
