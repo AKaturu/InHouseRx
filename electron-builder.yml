@@ -1,0 +1,42 @@
+appId: com.akaturu.inhouserx
+productName: InHouseRx
+copyright: Copyright © 2026 Abinav Katuru
+asar: true
+directories:
+  output: release
+files:
+  - dist/**/*
+  - electron/**/*
+  - build/icon.png
+  - package.json
+artifactName: ${productName}-${version}-${os}-${arch}.${ext}
+mac:
+  category: public.app-category.education
+  icon: build/icon.png
+  identity: null
+  target:
+    - target: dmg
+      arch: [universal]
+    - target: zip
+      arch: [universal]
+win:
+  icon: build/icon.png
+  target:
+    - target: nsis
+      arch: [x64]
+linux:
+  icon: build/icon.png
+  category: Education
+  synopsis: Find gaps between in-house exams and third-party medical study resources.
+  target:
+    - target: AppImage
+      arch: [x64]
+    - target: deb
+      arch: [x64]
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: always
+  createStartMenuShortcut: true
+  shortcutName: InHouseRx
+

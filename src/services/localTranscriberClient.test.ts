@@ -7,6 +7,7 @@ const response = (payload: unknown, ok = true) => ({
 }) as unknown as Response
 
 afterEach(() => {
+  Reflect.deleteProperty(window, 'inHouseRxDesktop')
   vi.unstubAllGlobals()
   vi.restoreAllMocks()
 })
@@ -26,6 +27,30 @@ describe('normalizeLoopbackUrl', () => {
 })
 
 describe('getLocalTranscriberCapabilities', () => {
+  it('uses the constrained desktop bridge when available', async () => {
+    const getCompanionCapabilities = vi.fn().mockResolvedValue({
+      supported_extensions: ['.png'],
+      max_file_mb: 20,
+      ocr: { ready: true },
+      speech: { ready: false },
+      privacy: 'Desktop loopback only.',
+    })
+    Object.defineProperty(window, 'inHouseRxDesktop', {
+      configurable: true,
+      value: { platform: 'win32', getCompanionCapabilities, transcribeWithCompanion: vi.fn() },
+    })
+    const fetchMock = vi.fn()
+    vi.stubGlobal('fetch', fetchMock)
+
+    await expect(getLocalTranscriberCapabilities()).resolves.toMatchObject({
+      supportedExtensions: ['.png'],
+      ocrReady: true,
+      detail: 'Desktop loopback only.',
+    })
+    expect(getCompanionCapabilities).toHaveBeenCalledOnce()
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
   it('maps the upstream capability contract', async () => {
     const fetchMock = vi.fn().mockResolvedValue(response({
       supported_extensions: ['.pdf', '.png', '.mp3'],
@@ -53,6 +78,33 @@ describe('getLocalTranscriberCapabilities', () => {
 })
 
 describe('transcribeWithLocalCompanion', () => {
+  it('sends file bytes through the desktop bridge without using renderer fetch', async () => {
+    const transcribeWithCompanion = vi.fn().mockResolvedValue({
+      filename: 'scan.png',
+      media_type: 'image/png',
+      text: 'Readable OCR content',
+      warnings: [],
+    })
+    Object.defineProperty(window, 'inHouseRxDesktop', {
+      configurable: true,
+      value: { platform: 'linux', getCompanionCapabilities: vi.fn(), transcribeWithCompanion },
+    })
+    const fetchMock = vi.fn()
+    vi.stubGlobal('fetch', fetchMock)
+    const file = new File(['image bytes'], 'scan.png', { type: 'image/png' })
+    Object.defineProperty(file, 'arrayBuffer', {
+      value: vi.fn().mockResolvedValue(new TextEncoder().encode('image bytes').buffer),
+    })
+
+    await expect(transcribeWithLocalCompanion(file)).resolves.toMatchObject({ text: 'Readable OCR content' })
+    expect(transcribeWithCompanion).toHaveBeenCalledWith(expect.objectContaining({
+      name: 'scan.png',
+      type: 'image/png',
+    }))
+    expect(transcribeWithCompanion.mock.calls[0][0].bytes.byteLength).toBe(11)
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
   it('posts one file and returns normalized text with warnings', async () => {
     const fetchMock = vi.fn().mockResolvedValue(response({
       filename: 'scan.png',

@@ -47,12 +47,9 @@ const fetchWithTimeout = async (url: string, init: RequestInit = {}, timeoutMs =
 
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null
 
-export const getLocalTranscriberCapabilities = async (options: ClientOptions = {}): Promise<LocalTranscriberCapabilities> => {
-  const baseUrl = normalizeLoopbackUrl(options.baseUrl ?? DEFAULT_BASE_URL)
-  const response = await fetchWithTimeout(`${baseUrl}/api/capabilities`, {}, options.timeoutMs)
-  if (!response.ok) throw new Error('Local Content Transcriber is not ready.')
+const getDesktopApi = (options: ClientOptions) => options.baseUrl ? undefined : window.inHouseRxDesktop
 
-  const payload: unknown = await response.json()
+const mapCapabilities = (payload: unknown): LocalTranscriberCapabilities => {
   if (!isRecord(payload) || !Array.isArray(payload.supported_extensions)) {
     throw new Error('Local Content Transcriber returned an invalid capability response.')
   }
@@ -68,7 +65,49 @@ export const getLocalTranscriberCapabilities = async (options: ClientOptions = {
   }
 }
 
+const mapTranscription = (payload: unknown, file: File): LocalTranscriberResult => {
+  if (!isRecord(payload) || typeof payload.text !== 'string' || !payload.text.trim()) {
+    throw new Error(`Local Content Transcriber found no readable content in ${file.name}.`)
+  }
+
+  return {
+    filename: typeof payload.filename === 'string' ? payload.filename : file.name,
+    mediaType: typeof payload.media_type === 'string' ? payload.media_type : file.type,
+    text: payload.text,
+    warnings: Array.isArray(payload.warnings)
+      ? payload.warnings.filter((warning): warning is string => typeof warning === 'string')
+      : [],
+  }
+}
+
+export const getLocalTranscriberCapabilities = async (options: ClientOptions = {}): Promise<LocalTranscriberCapabilities> => {
+  const desktopApi = getDesktopApi(options)
+  if (desktopApi) return mapCapabilities(await desktopApi.getCompanionCapabilities())
+
+  const baseUrl = normalizeLoopbackUrl(options.baseUrl ?? DEFAULT_BASE_URL)
+  const response = await fetchWithTimeout(`${baseUrl}/api/capabilities`, {}, options.timeoutMs)
+  if (!response.ok) throw new Error('Local Content Transcriber is not ready.')
+
+  const payload: unknown = await response.json()
+  return mapCapabilities(payload)
+}
+
 export const transcribeWithLocalCompanion = async (file: File, options: ClientOptions = {}): Promise<LocalTranscriberResult> => {
+  const desktopApi = getDesktopApi(options)
+  if (desktopApi) {
+    try {
+      const payload = await desktopApi.transcribeWithCompanion({
+        name: file.name,
+        type: file.type,
+        bytes: await file.arrayBuffer(),
+      })
+      return mapTranscription(payload, file)
+    } catch (error) {
+      if (error instanceof Error && !error.message.includes('Error invoking remote method')) throw error
+      throw new Error('Start the InHouseRx local companion to analyze scans, images, audio, or video.', { cause: error })
+    }
+  }
+
   const baseUrl = normalizeLoopbackUrl(options.baseUrl ?? DEFAULT_BASE_URL)
   const form = new FormData()
   form.append('file', file)
@@ -95,16 +134,5 @@ export const transcribeWithLocalCompanion = async (file: File, options: ClientOp
     throw new Error(message)
   }
 
-  if (!isRecord(payload) || typeof payload.text !== 'string' || !payload.text.trim()) {
-    throw new Error(`Local Content Transcriber found no readable content in ${file.name}.`)
-  }
-
-  return {
-    filename: typeof payload.filename === 'string' ? payload.filename : file.name,
-    mediaType: typeof payload.media_type === 'string' ? payload.media_type : file.type,
-    text: payload.text,
-    warnings: Array.isArray(payload.warnings)
-      ? payload.warnings.filter((warning): warning is string => typeof warning === 'string')
-      : [],
-  }
+  return mapTranscription(payload, file)
 }

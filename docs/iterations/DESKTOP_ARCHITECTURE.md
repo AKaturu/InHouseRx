@@ -23,7 +23,7 @@ The React renderer stays platform-neutral. At runtime it detects the frozen `win
 
 ### Preload bridge
 
-`electron/preload.mjs` exposes immutable, task-specific methods through `contextBridge`. It does not expose Electron, `ipcRenderer`, the filesystem, subprocesses, or an arbitrary channel argument.
+`electron/preload.cjs` exposes immutable, task-specific methods through `contextBridge`. It does not expose Electron, `ipcRenderer`, the filesystem, subprocesses, or an arbitrary channel argument. CommonJS is used because sandboxed preload scripts receive Electron's limited preload `require` API rather than a general Node.js environment.
 
 ### Pure security helpers
 
@@ -59,4 +59,3 @@ The React renderer stays platform-neutral. At runtime it detects the frozen `win
 | Windows | x64 | NSIS `.exe` installer |
 | macOS | universal (arm64 + x64) | `.dmg`, `.zip` |
 | Linux | x64 | `.AppImage`, `.deb` |
-

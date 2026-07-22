@@ -27,6 +27,20 @@ pnpm dev
 
 Open the local URL printed by Vite. Choose **View sample report** for the fastest product tour.
 
+### Desktop application
+
+InHouseRx also runs as a secure Electron desktop application on Windows, macOS, and Linux:
+
+```bash
+pnpm dev:desktop
+```
+
+Build a native package on its matching operating system with `pnpm desktop:win`, `pnpm desktop:mac`, or `pnpm desktop:linux`.
+
+The public [GitHub Releases page](https://github.com/AKaturu/InHouseRx/releases) provides the Windows installer, universal macOS disk image/ZIP, and Linux AppImage/deb packages. Current preview packages are unsigned, so Windows SmartScreen or macOS Gatekeeper may ask for confirmation. Certificate-backed signing and Apple notarization are planned release-hardening steps.
+
+The optional Local Content Transcriber remains a separate local service. Start it before InHouseRx when you want OCR or audio/video transcription; ordinary PDF, Word, PowerPoint, text, and Markdown analysis works without it.
+
 ## Optional local OCR and media companion
 
 InHouseRx can compose the separately tested Local Content Transcriber engine for scanned PDFs, PNG/JPEG/TIFF/WebP images, common audio files, and MP4/MOV/MKV/WebM video.
@@ -44,6 +58,7 @@ Keep the companion terminal running and start InHouseRx in another terminal. The
 
 ```bash
 pnpm test
+pnpm test:desktop
 pnpm test:companion
 pnpm lint
 pnpm build

@@ -1,0 +1,7 @@
+allowBuilds:
+  electron: true
+  electron-winstaller: false
+  sharp: true
+minimumReleaseAgeExclude:
+  - electron@43.2.0
+  - wait-on@9.1.0

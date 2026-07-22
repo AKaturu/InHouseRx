@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">InHouseRx</title>
+  <desc id="desc">A white Rx monogram on an InHouseRx blue rounded square.</desc>
+  <rect width="1024" height="1024" rx="224" fill="#337ab7"/>
+  <path fill="#fff" d="M238 248h240c146 0 236 75 236 204 0 86-42 148-116 179l151 145H599L471 652h-93v124H238V248Zm140 118v174h96c64 0 99-29 99-88s-35-86-99-86h-96Z"/>
+  <path fill="#fff" d="m650 583 60 70 61-70h100L759 711l119 137H776l-67-78-68 78H539l121-138-112-127h102Z"/>
+</svg>
+
